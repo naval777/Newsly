@@ -1,0 +1,32 @@
+import React, { Component } from 'react';
+import CardBox from '../components/CardBox';
+
+class DisplayPage extends Component {
+  constructor(props) {
+    super(props);
+
+  }
+
+  articleCard(article, index) {
+    return <div key={index}><CardBox title={article.title}
+                                     author={article.author} text={article.description}
+                                     urlToImage={article.urlToImage} pub_time={article.publishedAt}
+                                     url={article.url}
+
+    /><br /></div>;
+  }
+
+  render() {
+
+    return (
+    <div>
+      {this.props.source}
+      {this.props.articles.map(this.articleCard)}
+   </div>
+  );
+  }
+};
+
+export default DisplayPage;
+
+//
