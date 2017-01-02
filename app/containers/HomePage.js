@@ -9,7 +9,7 @@ import DisplayPage from './DisplayPage';
 class HomePage extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, source: null };
+    this.state = { loading: true, display: false };
     this.sources = null;
     this.articles = null;
     this.handleMenuClick = this.handleMenuClick.bind(this);
@@ -29,14 +29,14 @@ class HomePage extends Component {
 
   };
 
-  handleMenuClick(itemid) {
-
-    fetch('https://newsapi.org/v1/articles?source=' + itemid + '&apiKey=2609433deb994e6d994fb1cc43e8457e', { method: 'get' })
+  handleMenuClick(item) {
+    this.sourceName = item.name;
+    fetch('https://newsapi.org/v1/articles?source=' + item.id + '&apiKey=2609433deb994e6d994fb1cc43e8457e', { method: 'get' })
         .then((response) => {
           response.json().then((data) => {
             console.log(data);
             this.articles = data.articles;
-            this.setState({ source: itemid });
+            this.setState({ display: true });
 
           }).catch(function (error) {
             console.log(error);
@@ -48,7 +48,7 @@ class HomePage extends Component {
   };
 
   menuItems(item, index) {
-    return <MenuItem key={index} onClick={() => {this.handleMenuClick(item.id); } } primaryText={item.name} />;
+    return <MenuItem key={index} onClick={() => {this.handleMenuClick(item); } } primaryText={item.name} />;
   };
 
   render() {
@@ -56,20 +56,22 @@ class HomePage extends Component {
       return null;
     }
 
-    const source = this.state.source;
-    console.log(source);
+    const display = this.state.display;
     return (
-        <div><AppBar title="Newsly" iconClassNameRight="muidocs-icon-navigation-expand-more"/>
-          <div>
-            <Paper style={{ display: 'inline-block', width: '20%' }}>
+        <div>
+    <AppBar title="Newsly" />
+
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+
+            <Paper style={{ display: 'inline-block' }}>
               <Menu>
           {this.sources.map(this.menuItems, this)}
               </Menu>
             </Paper>
-            {source != null ? (<DisplayPage
-                                   source={source} articles={this.articles}/>) : null}
+            {display ? (<DisplayPage
+                                   name={this.sourceName} articles={this.articles}/>) : null}
           </div>
-        </div>
+          </div>
     );
   }
 };

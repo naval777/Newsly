@@ -19,8 +19,8 @@ class DisplayPage extends Component {
   render() {
 
     return (
-    <div>
-      {this.props.source}
+    <div style={{ margin: 'auto' }}>
+      <h3>{this.props.name}</h3><br />
       {this.props.articles.map(this.articleCard)}
    </div>
   );
